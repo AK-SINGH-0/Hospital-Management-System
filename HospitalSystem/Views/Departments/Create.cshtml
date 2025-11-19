@@ -1,0 +1,40 @@
+﻿@model HospitalSystem.Models.Department
+
+@{
+    ViewBag.Title = "Create Department";
+}
+
+@Html.Partial("~/Views/Admins/Header.cshtml");
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <section id="ozel-sayfa">
+        <h2 style="margin-left: 13%;">Add Department</h2>
+       
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="container" style="display:block">
+
+            <div class="kisisel-bilgiler" style="width:initial">
+                <ul>
+                    <li>
+                        <span>Name:</span>    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </li>
+                    <li>
+                        <span>Price:</span>    @Html.EditorFor(model => model.PriceUnit, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PriceUnit, "", new { @class = "text-danger" })
+                    </li>
+                    <li> <button>Send</button></li>
+                </ul>
+            </div>
+
+
+        </div>
+
+    </section>
+}

@@ -1,0 +1,33 @@
+﻿@model HospitalSystem.Models.Doctor
+@{
+    ViewBag.Title = "My Page";
+}
+
+@Html.Partial("~/Views/Doctors/Header.cshtml")
+
+
+<section id="ozel-sayfa">
+    <h2 style="margin-left: 13%;">My Page</h2>
+    <div class="container">
+        <div class="kisisel-bilgiler">
+            <h3>Personal Information</h3>
+            <ul>
+                <li><span>Adı Soyadı:</span> Dr. @(Model.Name + " "+Model.Surname)</li>
+                <li><span>Uzmanlık Alanı:</span> @Model.CurDepartment.Name</li> 
+                <li><span>Doğum Tarihi:</span> @Model.DOB.ToShortDateString()</li>
+                <li><span>Telefon Numarası:</span> @Model.Phone</li>
+                <li><span>E-posta Adresi:</span> @Model.Email</li>
+            </ul>
+        </div>
+
+        <div class="hesap-bilgileri">
+            <h3>-</h3>
+            <ul>
+                <li><span>Experience:</span> @Model.Experience</li>
+                <li><span>Specizalizations:</span> @Model.Specializations</li>
+                <li><span>Languages:</span> @Model.Languages</li>
+                <li><span>Gender:</span> @(Model.Gender?"Male":"Female")</li>
+            </ul>
+        </div>
+    </div>
+</section>

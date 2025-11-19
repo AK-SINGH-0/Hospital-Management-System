@@ -1,0 +1,67 @@
+﻿@model HospitalSystem.Models.Prescription
+
+@{
+    ViewBag.Title = "Edit Prescription";
+}
+
+@if (User.IsInRole(HospitalSystem.Models.MyConstants.RoleDoctor))
+{
+    @Html.Partial("~/Views/Doctors/Header.cshtml");
+}
+else if (User.IsInRole(HospitalSystem.Models.MyConstants.RolePatient))
+{
+    @Html.Partial("~/Views/Patients/Header.cshtml");
+
+}
+
+
+
+<section id="randevu-al-container">
+    <h2 class="container-header">Edit Precription</h2>
+    <div class="randevu-al">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+
+
+            <div class="form-group">
+                <label for="randevu-sebebi"> @Html.DisplayNameFor(model => model.Advice)</label>
+                @Html.EditorFor(model => model.Advice)
+                @Html.ValidationMessageFor(model => model.Advice, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label for="randevu-sebebi"> @Html.DisplayNameFor(model => model.Medicinde)</label>
+                @Html.EditorFor(model => model.Medicinde)
+                @Html.ValidationMessageFor(model => model.Medicinde, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label for="randevu-sebebi"> @Html.DisplayNameFor(model => model.Remark)</label>
+                @Html.EditorFor(model => model.Remark)
+                @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+            </div>
+
+
+            <div class="form-group">
+                <label>
+                    Appointment
+                </label>
+                @Html.DropDownList("Appointment_ID", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Advice, "", new { @class = "text-danger" })
+            </div>
+
+
+            <div class="form-group">
+                <input id="btn" type="submit" value="Edit Precription">
+            </div>
+        }
+    </div>
+</section>
+ 
+<script>
+    $('form').submit(function (e) {
+        $(':disabled').each(function (e) {
+            $(this).removeAttr('disabled');
+        })
+    });
+</script>

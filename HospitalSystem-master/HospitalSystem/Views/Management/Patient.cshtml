@@ -1,0 +1,30 @@
+﻿@model HospitalSystem.Models.Patient
+@{
+    ViewBag.Title = "My Page";
+}
+
+@Html.Partial("~/Views/Patients/Header.cshtml"); 
+<section id="ozel-sayfa">
+    <h2 style="margin-left: 13%;">My Page</h2>
+    <div class="container">
+        <div class="kisisel-bilgiler">
+            <h3>Personal Information</h3>
+            <ul>
+                <li><span>Name Surname:</span> @(Model.Name + " "+ Model.Surname)</li> 
+                <li><span>Date of Birth:</span> @Model.DOB.ToShortDateString()</li>
+                <li><span>Phone Number:</span> @Model.Phone</li>
+                <li><span>E-Mail Address:</span> @Model.Email</li>
+            </ul>
+        </div>
+        <div class="hesap-bilgileri">
+            <h3>-</h3>
+            <ul>
+                <li><span>Blood Group:</span>@HospitalSystem.Controllers.PatientsController.GetEnumMemberAttrValue(Model.Blood_Group)</li>
+                <li><span>Address:</span> @Model.Address</li>
+                <li><span>City:</span> @Model.City</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+

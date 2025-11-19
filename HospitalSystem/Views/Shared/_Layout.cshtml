@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Hospital</title>
+    @if (ViewBag.isHome != null)
+    {
+        <link rel="stylesheet" href="~/Content/style.css">
+    }
+    else
+    {
+        <link rel="stylesheet" href="~/Content/page-style.css">
+    }
+
+    <script type="text/javascript" src="~/Scripts/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+</head>
+
+<body>
+   
+
+    @RenderBody()
+
+
+    <footer class="footer">
+        
+
+       
+        <p>&copy;Fsmvu 2025 Hospital Management System Project</p>
+    </footer>
+
+
+</body>
+
+</html>

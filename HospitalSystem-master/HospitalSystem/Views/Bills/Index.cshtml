@@ -1,0 +1,132 @@
+﻿@model IEnumerable<HospitalSystem.Models.Bill>
+
+@{
+    ViewBag.Title = "Bills";
+}
+@if (User.IsInRole(HospitalSystem.Models.MyConstants.RoleAdmin))
+{
+    @Html.Partial("~/Views/Admins/Header.cshtml");
+}
+else if (User.IsInRole(HospitalSystem.Models.MyConstants.RolePatient))
+{
+    @Html.Partial("~/Views/Patients/Header.cshtml");
+
+}
+else if (User.IsInRole(HospitalSystem.Models.MyConstants.RoleAccountant))
+{
+    @Html.Partial("~/Views/Admins/AccountantHeader.cshtml");
+
+} 
+<section id="doktor-yonetimi">
+    <div class="container">
+        <h2>Bills</h2>
+        <ul class="responsive-table">
+            @if (Model.Count() == 0)
+            {
+                <p> No record</p>
+            }
+            else
+            {
+        <li class="table-header">
+            <div class="col col-1">@Html.DisplayNameFor(model => model.CurAppointment.AppointmentDate)</div>
+            <div class="col col-1">@Html.DisplayNameFor(model => model.CurAppointment.Patient.Name)</div>
+            <div class="col col-1">@Html.DisplayNameFor(model => model.Amount)</div>
+            <div class="col col-1">@Html.DisplayNameFor(model => model.IsPaid)</div>
+            <div class="col col-4">Actions</div>
+        </li>
+                foreach (var item in Model)
+                {
+        <li class="table-row">
+            <div class="col col-1" data-label="Job Id">@Html.DisplayFor(modelItem => item.CurAppointment.AppointmentDate)</div>
+            <div class="col col-1">@Html.DisplayFor(modelItem => item.CurAppointment.Patient.Name)</div>
+            <div class="col col-1">@Html.DisplayFor(modelItem => item.Amount)</div>
+            <div class="col col-2" data-label="Operation">
+                @(item.IsPaid ? "Paid" : "Not Paid")
+
+            </div>
+            <div class="col col-3" data-label="Operation">
+                @if (!item.IsPaid && User.IsInRole(HospitalSystem.Models.MyConstants.RolePatient))
+                {
+                    @Html.ActionLink("Pay it", "Payment", new { id = item.Id }, new { @class = "payIt" })
+                }
+
+                @if (User.IsInRole(HospitalSystem.Models.MyConstants.RoleAccountant))
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) 
+                    @Html.Raw(" | ")
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "deleteBill" })
+                }
+
+
+            </div>
+        </li>
+                }
+            }
+        </ul>
+
+    </div>
+</section>
+
+
+
+@if (User.IsInRole(HospitalSystem.Models.MyConstants.RolePatient))
+{
+    <script>
+
+     function gettoken() {
+        var token = '@Html.AntiForgeryToken()';
+        token = $(token).val();
+        return token;
+    }
+
+
+    $('.payIt').click(function (event) {//linke click eventi kazandırma
+        event.preventDefault();
+        if (confirm("Do you sure pay this bill")) {
+            $.ajax({
+                url: this.href,
+                data: {
+                    __RequestVerificationToken: gettoken()
+                },
+                type: 'POST',
+                success: function (result) {
+                    location.reload();
+                }
+            });
+        }
+
+    });
+
+
+    </script>
+
+}
+else if (User.IsInRole(HospitalSystem.Models.MyConstants.RoleAccountant))
+{
+<script>
+
+     function gettoken() {
+        var token = '@Html.AntiForgeryToken()';
+        token = $(token).val();
+        return token;
+    }
+
+         $('.deleteBill').click(function (event) {//linke click eventi kazandırma
+             event.preventDefault();
+             if (confirm("Do you sure delete this bill")) {
+                 $.ajax({
+                     url: this.href,
+                     data: {
+                         __RequestVerificationToken: gettoken()
+                     },
+                     type: 'POST',
+                     success: function (result) {
+                         location.reload();
+                     }
+                 });
+             }
+
+         });
+</script>
+     
+}

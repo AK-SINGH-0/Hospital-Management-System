@@ -1,0 +1,143 @@
+﻿@model IEnumerable<HospitalSystem.Models.Prescription>
+
+@{
+    ViewBag.Title = "Prescription";
+}
+
+@if (User.IsInRole(HospitalSystem.Models.MyConstants.RoleDoctor))
+{
+    @Html.Partial("~/Views/Doctors/Header.cshtml");
+}
+else if (User.IsInRole(HospitalSystem.Models.MyConstants.RolePatient))
+{
+    @Html.Partial("~/Views/Patients/Header.cshtml");
+}
+ 
+<section id="randevular">
+
+    <div class="container">
+        <h2>Prescription</h2> 
+        <ul class="responsive-table">
+
+
+            @if (Model.Count() == 0)
+            {
+                <p> No record</p>
+            }
+            else
+            {
+                <li class="table-header">
+                    <div class="col col-1">Date/Time</div>
+                    @if (User.IsInRole("Patient"))
+                    {
+                        <div class="col col-3">Doctor Name</div>
+                    }
+                    else
+                    {
+                        <div class="col col-3">Patient Name</div>
+                    }
+                    <div class="col col-6">Actions</div>
+                </li>
+            }
+            @foreach (var item in Model)
+            {
+                <li class="table-row">
+                    <div class="col col-1" data-label="Date">
+                        @Html.DisplayFor(modelItem => item.CurAppointment.AppointmentDate)
+                    </div>
+
+
+                    @if (User.IsInRole("Patient"))
+                    {<div class="col col-3" data-label="Doctor Name">@Html.DisplayFor(modelItem => item.CurAppointment.Doctor.Name)</div>
+                    }
+                    else
+                    { <div class="col col-3" data-label="Doctor Name">@Html.DisplayFor(modelItem => item.CurAppointment.Patient.Name)</div>
+                    }
+
+
+                <div class="col col-6" data-label="Change Appointment Operation">
+
+                    @if (User.IsInRole("Doctor"))
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                        @Html.Raw(" | ")
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "getDetails" })
+                        @Html.Raw(" | ")
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "deletePre" })
+                    }
+                    else
+                    { 
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "getDetails" })
+
+                }
+                </div>
+                </li>
+            }
+        </ul>
+    </div>
+
+</section>
+
+
+
+
+<div id="ex1" class="modal" style="max-width:auto">
+    <section id="ozel-sayfa" style="padding:0;margin-bottom:0">
+        <div class="container" style="max-width:initial;display:block">
+            <div class="hesap-bilgileri" style="width:initial">
+                <h3>Prescription Details</h3>
+                <ul>
+                    <li class="medicinePrescription"> </li>
+                    <li class="remarkPrescription"></li>
+                    <li class="advicePrescription"></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+     function gettoken() {
+        var token = '@Html.AntiForgeryToken()';
+        token = $(token).val();
+        return token;
+    }
+
+
+    $('.deletePre').click(function (event) {//linke click eventi kazandırma
+        event.preventDefault();
+        if (confirm("Do you sure delete this prescription")) {
+            $.ajax({
+                url: this.href,
+                data: {
+                    __RequestVerificationToken: gettoken()
+                },
+                type: 'POST',
+                success: function (result) {
+                    location.reload();
+                }
+            });
+        }
+
+    });
+</script>
+
+<script>
+    // Hasta tarafı için reçete detaylarını gösterme
+    $('.getDetails').click(function (event) {
+        event.preventDefault();
+        this.blur();
+        $.get(this.href, function (html) {
+            const prescription = JSON.parse(html); // JSON bilgisi gelir
+            // İlaç adını, reçetenin notunu ve tavsiyesini ayarlayın
+            $('li.medicinePrescription').html('<span>Medicine:</span> ' + prescription.Medicinde);
+            $('li.remarkPrescription').html('<span>Remark:</span> ' + prescription.Remark);
+            $('li.advicePrescription').html('<span>Advice:</span> ' + prescription.Advice);
+
+            // Modal penceresini göster
+            $('#ex1').modal();
+        });
+    });
+    // Hasta tarafı
+</script>
+

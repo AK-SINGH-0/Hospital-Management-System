@@ -1,0 +1,45 @@
+﻿@using HospitalSystem.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+}
+
+<header id="header">
+    <img id="logo-header" src="~/Content/Images/apple-touch-icon.png" alt="Hospital Logo">
+    <h1 id="head">The Great Hospital</h1>
+    <nav class="ana-menu"> 
+        <a href="/Home">Home Page</a>
+        @Html.ActionLink("Log In", "Login", "Account")
+        @Html.ActionLink("Register", "Register", "Management") 
+    </nav>
+</header>
+
+
+<section id="sifre-yonetimi" style="margin-top:2%">
+    <h2 id="form-header">Log in</h2>
+    <div class="container-password-management">
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="input-group">
+                <label for="kullanici_adi">E-mail:</label>
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            </div>
+            <div class="input-group">
+                <label for="eski_sifre">Password:</label>
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+            <div class="input-group">
+                <label for="yeni_sifre">
+                    Remember me:  @Html.CheckBoxFor(m => m.RememberMe,new {@style="width:initial"})
+                </label>
+            </div>
+
+            <button type="submit">Log in</button>
+        }
+    </div>
+</section>
+
